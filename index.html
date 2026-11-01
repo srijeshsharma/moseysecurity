@@ -35,6 +35,7 @@
 
   * { box-sizing: border-box; }
   body {
+    margin: 0;
     background: var(--white); color: var(--stone);
     font: 400 16px/1.6 var(--font-body);
     -webkit-font-smoothing: antialiased;
@@ -101,7 +102,7 @@
   .hero { border-top: 0; padding-block: var(--s6) var(--s12); position: relative; overflow: hidden; }
   .hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: var(--s8); align-items: center; }
   .hero .actions { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s2); }
-  .hero-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; will-change: transform; }
+  .hero-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; will-change: transform; -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%); mask-image: linear-gradient(to bottom, #000 55%, transparent 100%); }
   .blob { position: absolute; border-radius: 50%; filter: blur(64px); animation: drift 28s ease-in-out infinite alternate; }
   .blob.a { width: 480px; height: 480px; right: -80px; top: -40px; background: rgba(249, 197, 189, 0.45); }
   .blob.b { width: 400px; height: 400px; right: 32%; bottom: -160px; background: rgba(128, 118, 163, 0.14); animation-duration: 34s; animation-direction: alternate-reverse; }
@@ -197,13 +198,25 @@
     .compare { grid-template-columns: minmax(0, 1fr); }
     section { padding-block: var(--s8); }
     .hero { padding-block: var(--s3) var(--s8); }
-    .strip-items { justify-content: flex-start; }
+    .strip .wrap { flex-direction: column; align-items: flex-start; gap: var(--s2); }
+    .strip-items { justify-content: flex-start; font-size: 16px; gap: var(--s1) var(--s3); }
   }
   @media (max-width: 560px) {
     .stats, .steps { grid-template-columns: minmax(0, 1fr); }
+    .hero .actions .btn { flex: 1 1 100%; }
     .defs div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
     .card, form { padding: var(--s3); }
     nav a:not(.btn) { display: none; }
+  }
+  /* touch screens: no sticky hover states, give a quick press response instead */
+  @media (hover: none) {
+    .btn:hover { transform: none; box-shadow: none; }
+    .btn.ghost:hover { border-color: var(--stone); }
+    .btn:active { transform: scale(0.98); }
+    a.btn:not(.ghost):not(.small):hover::after { transform: none; }
+    .card:hover { border-color: var(--line); box-shadow: var(--shadow); }
+    nav a:not(.btn):hover::after { transform: scaleX(0); }
+    summary:hover { color: var(--ink); }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -290,7 +303,7 @@
     <div class="wrap">
       <div class="section-head">
         <p class="eyebrow" data-reveal>Why now</p>
-        <h2 data-reveal style="--i:1">AI makes mid-sized businesses worth attacking.</h2>
+        <h2 data-reveal style="--i:1">AI makes mid&#8209;sized businesses worth attacking.</h2>
         <p data-reveal style="--i:2">Careful scams used to cost too much to aim at you. AI makes them cheap.</p>
       </div>
       <div class="stats">
