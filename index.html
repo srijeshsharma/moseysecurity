@@ -16,6 +16,7 @@
     --purple: #8076a3;
     --pink: #F9C5BD;
     --stone: #7C677F;
+    --stone-dark: #66556A;
     --ink: #3E3142;
     --link: #6A5F8F;
     --olive: #5F7A00;
@@ -68,13 +69,15 @@
   .js [data-reveal].in { opacity: 1; transform: none; }
 
   /* header */
+  header { position: relative; z-index: 2; }
+  main { position: relative; z-index: 1; }
   header .wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); padding-block: var(--s3); flex-wrap: wrap; }
   .brand { font-family: var(--font-display); font-weight: 700; font-size: 24px; letter-spacing: -0.03em; text-decoration: none; color: var(--ink); display: inline-flex; align-items: center; gap: var(--s1); }
   .brand i { width: 16px; height: 16px; border: 3px solid var(--purple); border-radius: 50%; display: inline-block; position: relative; transition: transform .3s var(--ease); }
   .brand:hover i { transform: scale(1.15); }
   .brand i::after { content: ""; position: absolute; inset: 2px; background: var(--green); border-radius: 50%; }
   nav { display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap; }
-  nav a:not(.btn) { text-decoration: none; font-weight: 500; position: relative; padding-block: 4px; transition: color .2s var(--ease); }
+  nav a:not(.btn) { text-decoration: none; color: var(--ink); font-weight: 500; position: relative; padding-block: 4px; transition: color .2s var(--ease); }
   nav a:not(.btn)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--purple); transform: scaleX(0); transform-origin: left; transition: transform .25s var(--ease); }
   nav a:not(.btn):hover { color: var(--ink); }
   nav a:not(.btn):hover::after { transform: scaleX(1); }
@@ -99,14 +102,20 @@
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* hero */
-  .hero { border-top: 0; padding-block: var(--s6) var(--s12); position: relative; overflow: hidden; }
+  .hero { border-top: 0; padding-block: var(--s6) var(--s12); position: relative; }
+  .hero .lede { color: var(--stone-dark); }
   .hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: var(--s8); align-items: center; }
   .hero .actions { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s2); }
-  .hero-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; will-change: transform; -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%); mask-image: linear-gradient(to bottom, #000 55%, transparent 100%); }
-  .blob { position: absolute; border-radius: 50%; filter: blur(64px); animation: drift 28s ease-in-out infinite alternate; }
-  .blob.a { width: 480px; height: 480px; right: -80px; top: -40px; background: rgba(249, 197, 189, 0.45); }
-  .blob.b { width: 400px; height: 400px; right: 32%; bottom: -160px; background: rgba(128, 118, 163, 0.14); animation-duration: 34s; animation-direction: alternate-reverse; }
-  @keyframes drift { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(-48px, 32px, 0) scale(1.08); } }
+  /* page-level wash: starts behind the header so the two read as one surface, anchored pink at the logo, then sweeps across the full width */
+  .hero-bg { position: absolute; top: 0; left: 0; right: 0; height: 1000px; overflow: hidden; z-index: 0; pointer-events: none; will-change: transform; -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 100%); mask-image: linear-gradient(to bottom, #000 50%, transparent 100%); }
+  .blob { position: absolute; border-radius: 50%; will-change: transform; }
+  .blob.a { width: 900px; height: 900px; left: -420px; top: -460px; background: radial-gradient(closest-side, rgba(249, 197, 189, 0.85), rgba(249, 197, 189, 0)); animation: nudge 26s ease-in-out infinite alternate; }
+  .blob.b { width: 760px; height: 760px; left: -260px; top: 120px; background: radial-gradient(closest-side, rgba(128, 118, 163, 0.24), rgba(128, 118, 163, 0)); animation: sweep 34s ease-in-out infinite alternate; }
+  .blob.c { width: 720px; height: 720px; right: -300px; top: -60px; background: radial-gradient(closest-side, rgba(249, 197, 189, 0.6), rgba(249, 197, 189, 0)); animation: sweepback 40s ease-in-out infinite alternate; }
+  .blob.d { width: 560px; height: 560px; left: 28%; top: 360px; background: radial-gradient(closest-side, rgba(155, 196, 0, 0.14), rgba(155, 196, 0, 0)); animation: sweep 46s ease-in-out infinite alternate-reverse; }
+  @keyframes nudge { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(60px, 40px, 0); } }
+  @keyframes sweep { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(85vw, -40px, 0); } }
+  @keyframes sweepback { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-80vw, 80px, 0); } }
 
   /* sample report: the one elevated element, tilts toward the cursor */
   .tilt { perspective: 1000px; min-width: 0; }
@@ -225,6 +234,8 @@
 </style>
 <script>document.documentElement.classList.add("js");</script>
 
+<div class="hero-bg" aria-hidden="true"><span class="blob a"></span><span class="blob b"></span><span class="blob c"></span><span class="blob d"></span></div>
+
 <header>
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Mosey home"><i aria-hidden="true"></i>Mosey</a>
@@ -239,7 +250,6 @@
 
 <main id="top">
   <section class="hero">
-    <div class="hero-bg" aria-hidden="true"><span class="blob a"></span><span class="blob b"></span></div>
     <div class="wrap">
       <div class="stack">
         <p class="eyebrow" data-reveal style="--i:0"><strong>Pilot waitlist open</strong> · AI scam testing for mid-sized businesses</p>
@@ -473,6 +483,9 @@
 
 <script>
   (function () {
+    /* Paste your form endpoint here, e.g. https://formspree.io/f/xxxxxxxx */
+    var FORM_ENDPOINT = "";
+
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     /* count-up for stat numbers */
@@ -555,14 +568,25 @@
       sp.setAttribute("aria-hidden", "true");
       btn.insertBefore(sp, label);
       status.textContent = "";
-      setTimeout(function () {
+      function done(msg) {
         sp.remove();
         btn.removeAttribute("aria-busy");
         btn.disabled = false;
         label.textContent = "Join the waitlist";
+        status.textContent = msg;
+      }
+      if (!FORM_ENDPOINT) { done("This form is not connected to an inbox yet."); return; }
+      fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ email: form.elements.email.value, business: form.elements.biz.value, staff: form.elements.size.value })
+      }).then(function (r) {
+        if (!r.ok) throw new Error("bad status");
         form.reset();
-        status.textContent = "Thanks. We will be in touch about a pilot.";
-      }, 900);
+        done("Thanks. We will be in touch about a pilot.");
+      }).catch(function () {
+        done("Could not send. Please try again in a moment.");
+      });
     });
   })();
 </script>
